@@ -38,7 +38,7 @@ de la propiedad ```user.password.regex=${user.password.regex}``` como variable d
 
 #### Ejecución con maven y Java (Necesario maven y java 11 instalados)
 
-- clonar el proyecto ```$ git clone https://github.com/bisberrios/nisum.git```
+- clonar el proyecto ```$ https://github.com/MattMendez/UserRegistration-Nisum.git```
 - Ir al directorio del proyecto
   ```$ cd nisum/ ```
 - Generar jar del proyecto
