@@ -9,8 +9,6 @@ import com.userregistration.exceptions.SqlException;
 import com.userregistration.exceptions.UserAlreadyExistException;
 import com.userregistration.repositories.UserRepository;
 import com.userregistration.utils.JwtUtil;
-import io.jsonwebtoken.Jwt;
-import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +54,8 @@ public class UserService {
         }
 
         User user = newUser.toEntity();
-        user.setToken(JwtUtil.generateToken(user));
+
+        user.setToken(new JwtUtil().generateToken(user));
 
         try {
             user = userRepository.save(user);
@@ -66,5 +65,12 @@ public class UserService {
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new NewUserResponse().toResponse(user));
+    }
+
+
+    public ResponseEntity findAllUsers(String token) {
+        new JwtUtil().decodeToken(token);
+
+        return ResponseEntity.status(HttpStatus.OK).body(userRepository.findAll());
     }
 }

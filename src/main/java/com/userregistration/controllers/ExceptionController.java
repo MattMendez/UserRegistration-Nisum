@@ -1,10 +1,7 @@
 package com.userregistration.controllers;
 
 import com.userregistration.dtos.ExceptionDto;
-import com.userregistration.exceptions.EmailException;
-import com.userregistration.exceptions.PasswordException;
-import com.userregistration.exceptions.SqlException;
-import com.userregistration.exceptions.UserAlreadyExistException;
+import com.userregistration.exceptions.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -35,4 +32,11 @@ public class ExceptionController {
         ExceptionDto exceptionDto = ExceptionDto.builder().code(ex.getCode()).message(ex.getMessage()).build();
         return new ResponseEntity<>(exceptionDto, ex.getStatus());
     }
+
+    @ExceptionHandler(value = JwtException.class)
+    public ResponseEntity<ExceptionDto> JwtException(EmailException ex){
+        ExceptionDto exceptionDto = ExceptionDto.builder().code(ex.getCode()).message(ex.getMessage()).build();
+        return new ResponseEntity<>(exceptionDto, ex.getStatus());
+    }
+
 }

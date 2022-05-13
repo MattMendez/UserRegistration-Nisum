@@ -3,20 +3,20 @@ package com.userregistration.dtos.request;
 import com.userregistration.entities.Phone;
 import com.userregistration.entities.User;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class NewUserRequest {
 
     @NotBlank(message = "Name may not be empty")

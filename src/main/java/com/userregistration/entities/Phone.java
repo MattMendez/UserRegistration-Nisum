@@ -1,5 +1,6 @@
 package com.userregistration.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,5 +23,6 @@ public class Phone {
     @JoinColumn(name = "user_uuid",
             referencedColumnName = "uuid")
     @ToString.Exclude
+    @JsonBackReference
     private User user;
 }

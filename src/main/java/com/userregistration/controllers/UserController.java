@@ -11,10 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
@@ -66,4 +63,10 @@ public class UserController {
         return userService.registerNewUser(newUser);
     }
 
+
+    @GetMapping(value = "/findall",produces = "application/json")
+    @Operation(summary="Find all the new users", description ="Service to find all the new users, use the token from the other endpoint")
+    public ResponseEntity findAll(@RequestParam String token){
+        return userService.findAllUsers(token);
+    }
 }

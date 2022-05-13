@@ -2,17 +2,21 @@ package com.userregistration.utils;
 
 import com.userregistration.entities.User;
 
+import com.userregistration.exceptions.JwtException;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.impl.crypto.DefaultJwtSignatureValidator;
 
+import javax.crypto.spec.SecretKeySpec;
 import java.time.Instant;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 
 public class JwtUtil {
 
-    public static String generateToken(User user) {
+    public String generateToken(User user) {
 
         try {
             SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.ES256;
@@ -27,17 +31,44 @@ public class JwtUtil {
                     .setSubject("http://nisum.com")
                     .claim("name", user.getName())
                     .claim("email", user.getEmail())
-
                     .setIssuedAt(Date.from(Instant.ofEpochSecond(1466796822L)))
                     .setExpiration(Date.from(Instant.ofEpochSecond(4622470422L)))
-                    .signWith(SignatureAlgorithm.HS256, "secretkey");
+                    .signWith(SignatureAlgorithm.HS256, "secretkey".getBytes());
 
             String tokenJWTString = tokenJWT.compact();
             System.out.println(tokenJWTString);
             return tokenJWTString;
 
         } catch (Exception ex) {
+
             return "Error creating the token JWT" + ex.getMessage();
         }
+    }
+
+    public void decodeToken(String token){
+
+        String[] chunks = token.split("\\.");
+
+        Base64.Decoder decoder = Base64.getUrlDecoder();
+
+        String header = new String(decoder.decode(chunks[0]));
+        String payload = new String(decoder.decode(chunks[1]));
+
+        String key ="secretkey";
+
+        SignatureAlgorithm sa = SignatureAlgorithm.HS256;
+
+        SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), sa.getJcaName());
+
+        String tokenWithoutSignature = chunks[0] + "." + chunks[1];
+
+        String signature = chunks[2];
+
+        DefaultJwtSignatureValidator validator = new DefaultJwtSignatureValidator(sa, secretKeySpec);
+
+        if (!validator.isValid(tokenWithoutSignature, signature)) {
+            throw new JwtException();
+        }
+
     }
 }
